@@ -1,0 +1,120 @@
+.task-create-form {
+  display: flex;
+  flex-direction: column;
+
+  padding: 65px 0px 0px 55px;
+
+  gap: 55px;
+  margin-top: 25px;
+
+  width: 1684px;
+  height: 958px;
+
+  border-radius: 4px;
+  border-width: 0.3px;
+  background-color: #fbf9ffa6;
+}
+
+.line {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 161px;
+
+  width: 1261px;
+}
+
+.line-btn {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 161px;
+
+  width: 1261px;
+}
+.left-3 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 32px;
+}
+.right-3 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.task-create-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-create-form label p {
+  font-family: 'FiraGO', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #343a40;
+}
+
+.task-create-form input {
+  width: 550px;
+  height: 45px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  gap: 10px;
+  padding: 14px;
+}
+
+.input-deadline {
+  width: 318px !important;
+  height: 45px !important;
+  border-radius: 5px !important;
+  border: 1px solid #dee2e6 !important;
+  gap: 6px !important;
+  padding: 14px !important;
+}
+
+.task-create-form textarea {
+  width: 550px;
+  height: 133px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  gap: 10px;
+  padding: 14px;
+}
+
+.task-create-form select {
+  width: 259px;
+  height: 45px;
+  border-radius: 5px;
+  border: 1px solid #dee2e6;
+  gap: 10px;
+  padding: 14px;
+}
+
+.task-create-form button {
+  width: 208px;
+  height: 42px;
+  border-radius: 5px;
+  gap: 4px;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  background-color: #8338ec;
+
+  font-family: 'FiraGO', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.task-create-form button:hover {
+  background-color: #d9a721;
+}

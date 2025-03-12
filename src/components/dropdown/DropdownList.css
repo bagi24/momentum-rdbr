@@ -48,13 +48,14 @@
   margin-top: 21px;
   gap: 22px;
   width: 100%;
-
+  background-color: #ffffff;
   left: 0;
   display: flex;
   align-items: start;
   justify-content: start;
   flex-direction: column;
   position: absolute;
+  z-index: 1000;
 }
 
 .dropdown-items li {

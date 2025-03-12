@@ -1,0 +1,44 @@
+.status-container {
+  display: flex;
+  gap: 52px;
+  flex-wrap: wrap;
+  margin-top: 79px;
+  z-index: 999;
+}
+
+.status-button {
+  border: none;
+
+  cursor: pointer;
+
+  width: 381px;
+  height: 54px;
+  border-radius: 10px;
+  gap: 10px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  font-family: 'FiraGO', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #ffffff;
+}
+
+.status-0 {
+  background-color: #f7bc30;
+}
+.status-1 {
+  background-color: #fb5607;
+}
+.status-2 {
+  background-color: #ff006e;
+}
+.status-3 {
+  background-color: #3a86ff;
+}
+
+.status-button:hover {
+  opacity: 0.8;
+}

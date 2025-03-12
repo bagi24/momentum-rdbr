@@ -1,0 +1,42 @@
+.tasks-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 52px;
+  margin-top: 30px;
+  justify-content: center;
+}
+
+.task-card {
+  width: 381px;
+  height: 217px;
+  border-radius: 15px;
+  border: 1px solid #f7bc30;
+  padding: 20px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.task-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.task-description {
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+}
+
+span {
+  font-family: 'FiraGO', sans-serif;
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #212529;
+  margin-top: 40px;
+}
