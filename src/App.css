@@ -1,0 +1,9 @@
+.App {
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  justify-content: flex-start; 
+  align-items: flex-start; 
+  padding: 0px 120px 0px 120px;
+  min-height: 100vh;
+}
