@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../../components/header/Header';
+import ArrowDown from '../../assets/icons/arrow-down.png';
+import CalendarIcon from '../../assets/icons/calendar-line.png';
 import './TaskCreate.css';
 
 const TaskCreate = () => {
+  const [departments, setDepartments] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [priorities, setPriorities] = useState([]);
+  const [statuses, setStatuses] = useState([]);
+
   const [formData, setFormData] = useState({
     title: '',
     department: '',
@@ -22,13 +29,38 @@ const TaskCreate = () => {
     console.log('ახალი დავალება:', formData);
   };
 
+  const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState({ icon: null, name: '' });
+
+  const handlePrioritySelect = ({ icon, name }) => {
+    setSelectedPriority({ icon, name });
+    setIsPriorityDropdownOpen(false);
+  };
+
+  useEffect(() => {
+    fetch('https://momentum.redberryinternship.ge/api/departments')
+      .then(response => response.json())
+      .then(data => setDepartments(data))
+      .catch(error => console.error('Error fetching departments:', error));
+
+    fetch('https://momentum.redberryinternship.ge/api/priorities')
+      .then(response => response.json())
+      .then(data => setPriorities(data))
+      .catch(error => console.error('Error fetching priorities:', error));
+
+    fetch('https://momentum.redberryinternship.ge/api/statuses')
+      .then(response => response.json())
+      .then(data => setStatuses(data))
+      .catch(error => console.error('Error fetching statuses:', error));
+  }, []);
+
   return (
     <>
       <Header />
       <span>შექმენი ახალი დავალება</span>
       <form className='task-create-form' onSubmit={handleSubmit}>
         <div className='line'>
-          <label>
+          <label className='label-line-1'>
             <p> სათაური*</p>
             <input
               type='text'
@@ -37,59 +69,121 @@ const TaskCreate = () => {
               onChange={handleChange}
               required
             />
+            <div className='validation'>
+              <div className='min-val'>
+                <p> მინიმუმ 2 სიმბოლო</p>
+              </div>
+              <div className='max-val'>
+                <p>მაქსიმუმ 255 სიმბოლო</p>
+              </div>
+            </div>
           </label>
           <label>
             <p>დეპარტამენტი*</p>
-            <input
-              type='text'
-              name='department'
-              value={formData.department}
-              onChange={handleChange}
-              required
-            />
+            <select className='custom-selecte'>
+              <option>აირჩიეთ დეპარტამენტი</option>
+              {departments.map(dept => (
+                <option key={dept.id} value={dept.id}>
+                  {dept.name}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
         <div className='line'>
           <label>
             <p> აღწერა</p>
             <textarea name='description' value={formData.description} onChange={handleChange} />
+            <div className='validation'>
+              <div className='min-val'>
+                <p> მინიმუმ 2 სიმბოლო</p>
+              </div>
+              <div className='max-val'>
+                <p>მაქსიმუმ 255 სიმბოლო</p>
+              </div>
+            </div>
           </label>
           <label>
             <p>პასუხისმგებელი თანამშრომელი*</p>
-            <input type='text' name='assignee' value={formData.assignee} onChange={handleChange} />
+            <select className='custom-selecte'>
+              {employees.map(employe => (
+                <option key={employe.id} value={employe.id}>
+                  {employe.name}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
         <div className='line'>
           <div className='left-3'>
-            <label>
-              <p>პრიორიტეტი*</p>
-              <select name='priority' value={formData.priority} onChange={handleChange} required>
-                <option value=''>აირჩიეთ</option>
-                <option value='low'>დაბალი</option>
-                <option value='medium'>საშუალო</option>
-                <option value='high'>მაღალი</option>
-              </select>
-            </label>
+            <div className='left-3-content'>
+              <p>პრიორიტეტი *</p>
+              <div className='custom-dropdown'>
+                <div
+                  className='dropdown-header'
+                  onClick={() => setIsPriorityDropdownOpen(!isPriorityDropdownOpen)}>
+                  {selectedPriority.icon ? (
+                    <>
+                      <img
+                        src={selectedPriority.icon}
+                        alt='Priority Icon'
+                        className='priority-icon'
+                      />
+                      <span>{selectedPriority.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>აირჩიეთ</span>
+                    </>
+                  )}
+                  <img src={ArrowDown} alt='arrow-down' className='dropdown-arrow' />
+                </div>
+                {isPriorityDropdownOpen && (
+                  <div className='dropdown-options'>
+                    {priorities.map(priority => (
+                      <div
+                        key={priority.id}
+                        className='dropdown-option'
+                        onClick={() =>
+                          handlePrioritySelect({ icon: priority.icon, name: priority.name })
+                        }>
+                        <img src={priority.icon} alt='' /> {priority.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <label>
               <p>სტატუსი*</p>
               <select name='status' value={formData.status} onChange={handleChange} required>
                 <option value=''>აირჩიეთ</option>
-                <option value='pending'>მომლოდინე</option>
-                <option value='in_progress'>მიმდინარე</option>
-                <option value='completed'>დასრულებული</option>
+                {statuses.map(status => (
+                  <option key={status.id} value={status.name}>
+                    {status.name}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
+
           <div className='right-3'>
-            <label>
+            <label className='date-picker-wrapper'>
               <p> დედლაინი</p>
-              <input
-                className='input-deadline'
-                type='date'
-                name='deadline'
-                value={formData.deadline}
-                onChange={handleChange}
-              />
+              <div className='date-picker-container'>
+                <img src={CalendarIcon} alt='Calendar Icon' className='calendar-icon' />
+                <input
+                  className='input-deadline'
+                  type='text'
+                  name='deadline'
+                  placeholder='DD/MM/YYYY'
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  onFocus={e => (e.target.type = 'date')}
+                  onBlur={e => (e.target.type = 'text')}
+                />
+              </div>
             </label>
           </div>
         </div>
