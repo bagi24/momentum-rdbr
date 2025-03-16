@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../../components/header/Header';
 import ArrowDown from '../../assets/icons/arrow-down.png';
 import CalendarIcon from '../../assets/icons/calendar-line.png';
+import { useNavigate } from 'react-router-dom';
 import './TaskCreate.css';
 
 const TaskCreate = () => {
@@ -41,6 +42,8 @@ const TaskCreate = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = async e => {
     e.preventDefault();
     setFormSubmitted(true);
@@ -78,6 +81,7 @@ const TaskCreate = () => {
 
       const result = await response.json();
       console.log('Task created successfully:', result);
+      navigate('/', { state: { taskData: result } });
     } catch (error) {
       console.error('Error submitting form:', error);
     }

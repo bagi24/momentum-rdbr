@@ -10,9 +10,12 @@ const DropdownList = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (url, setState) => {
+    const fetchData = async (url, setState, options = {}) => {
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, options);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
         console.log(`მიღებული მონაცემები (${url}):`, data);
         setState(data);
@@ -22,8 +25,14 @@ const DropdownList = () => {
     };
 
     fetchData('https://momentum.redberryinternship.ge/api/departments', setDepartments);
+
     fetchData('https://momentum.redberryinternship.ge/api/priorities', setPriorities);
-    fetchData('https://momentum.redberryinternship.ge/api/employees', setEmployees);
+
+    fetchData('https://momentum.redberryinternship.ge/api/employees', setEmployees, {
+      headers: {
+        Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+      },
+    });
   }, []);
 
   const toggleDropdown = name => {
@@ -41,10 +50,13 @@ const DropdownList = () => {
   const dropdowns = [
     { name: 'დეპარტამენტი', items: departments.map(dep => dep.name) },
     { name: 'პრიორიტეტი', items: priorities.map(pri => pri.name) },
-    { name: 'თანამშრომელი', items: employees.map(emp => `${emp.first_name} ${emp.last_name}`) },
+    {
+      name: 'თანამშრომელი',
+      items: employees.map(emp => `${emp.name} ${emp.surname}`),
+    },
   ];
 
-  console.log('Dropdowns data:', dropdowns); // Debugging
+  console.log('Dropdowns data:', dropdowns);
 
   return (
     <div className='dropdown-container'>
