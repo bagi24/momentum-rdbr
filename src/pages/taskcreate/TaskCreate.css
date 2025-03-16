@@ -268,3 +268,17 @@
   cursor: pointer;
   padding-right: 10px;
 }
+
+.validation .min-val.valid p,
+.validation .max-val.valid p {
+  color: green !important;
+}
+
+.validation .min-val:not(.valid) p,
+.validation .max-val:not(.valid) p {
+  color: red !important; 
+}
+
+.invalid-field option {
+  border: 1px solid red !important; 
+}

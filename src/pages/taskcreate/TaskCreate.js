@@ -9,6 +9,9 @@ const TaskCreate = () => {
   const [employees, setEmployees] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [statuses, setStatuses] = useState([]);
+  const [titleValidation, setTitleValidation] = useState('');
+  const [descriptionValidation, setDescriptionValidation] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -21,37 +24,104 @@ const TaskCreate = () => {
   });
 
   const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prevState => ({ ...prevState, [name]: value }));
+
+    if (name === 'title') {
+      setTitleValidation({
+        minValid: value.length >= 2,
+        maxValid: value.length <= 255,
+      });
+    }
+    if (name === 'description') {
+      setDescriptionValidation({
+        minValid: value.length >= 2,
+        maxValid: value.length <= 255,
+      });
+    }
   };
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
-    console.log('ახალი დავალება:', formData);
+    setFormSubmitted(true);
+
+    if (!formData.department || !formData.assignee || !selectedPriority.id || !formData.status) {
+      console.log('Please fill all required fields');
+      return;
+    }
+
+    const taskData = {
+      name: formData.title,
+      description: formData.description,
+      due_date: formData.deadline,
+      employee_id: formData.assignee,
+      priority_id: selectedPriority.id,
+      status_id: formData.status,
+    };
+
+    try {
+      const response = await fetch('https://momentum.redberryinternship.ge/api/tasks', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        console.error('Error response from server:', errorResponse);
+        throw new Error('Failed to create task');
+      }
+
+      const result = await response.json();
+      console.log('Task created successfully:', result);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
 
   const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState({ icon: null, name: '' });
 
-  const handlePrioritySelect = ({ icon, name }) => {
-    setSelectedPriority({ icon, name });
+  const handlePrioritySelect = ({ id, icon, name }) => {
+    setSelectedPriority({ id, icon, name }); // Include `id` in the selected priority
     setIsPriorityDropdownOpen(false);
   };
 
   useEffect(() => {
-    fetch('https://momentum.redberryinternship.ge/api/departments')
-      .then(response => response.json())
-      .then(data => setDepartments(data))
-      .catch(error => console.error('Error fetching departments:', error));
+    const fetchData = async () => {
+      try {
+        const [departmentsRes, prioritiesRes, statusesRes, employeesRes] = await Promise.all([
+          fetch('https://momentum.redberryinternship.ge/api/departments'),
+          fetch('https://momentum.redberryinternship.ge/api/priorities'),
+          fetch('https://momentum.redberryinternship.ge/api/statuses'),
+          fetch('https://momentum.redberryinternship.ge/api/employees', {
+            headers: {
+              Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+            },
+          }),
+        ]);
 
-    fetch('https://momentum.redberryinternship.ge/api/priorities')
-      .then(response => response.json())
-      .then(data => setPriorities(data))
-      .catch(error => console.error('Error fetching priorities:', error));
+        const [departments, priorities, statuses, employees] = await Promise.all([
+          departmentsRes.json(),
+          prioritiesRes.json(),
+          statusesRes.json(),
+          employeesRes.json(),
+        ]);
 
-    fetch('https://momentum.redberryinternship.ge/api/statuses')
-      .then(response => response.json())
-      .then(data => setStatuses(data))
-      .catch(error => console.error('Error fetching statuses:', error));
+        setDepartments(departments);
+        setPriorities(priorities);
+        setStatuses(statuses);
+        setEmployees(employees);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (
@@ -70,18 +140,25 @@ const TaskCreate = () => {
               required
             />
             <div className='validation'>
-              <div className='min-val'>
+              <div className={`min-val ${titleValidation.minValid ? 'valid' : ''}`}>
                 <p> მინიმუმ 2 სიმბოლო</p>
               </div>
-              <div className='max-val'>
+              <div className={`max-val ${titleValidation.maxValid ? 'valid' : ''}`}>
                 <p>მაქსიმუმ 255 სიმბოლო</p>
               </div>
             </div>
           </label>
           <label>
             <p>დეპარტამენტი*</p>
-            <select className='custom-selecte'>
-              <option>აირჩიეთ დეპარტამენტი</option>
+            <select
+              name='department'
+              value={formData.department}
+              onChange={handleChange}
+              className={`custom-selecte ${
+                formSubmitted && !formData.department ? 'invalid-field' : ''
+              }`}
+              required>
+              <option value=''>აირჩიეთ დეპარტამენტი</option>
               {departments.map(dept => (
                 <option key={dept.id} value={dept.id}>
                   {dept.name}
@@ -95,20 +172,26 @@ const TaskCreate = () => {
             <p> აღწერა</p>
             <textarea name='description' value={formData.description} onChange={handleChange} />
             <div className='validation'>
-              <div className='min-val'>
+              <div className={`min-val ${descriptionValidation.minValid ? 'valid' : ''}`}>
                 <p> მინიმუმ 2 სიმბოლო</p>
               </div>
-              <div className='max-val'>
+              <div className={`max-val ${descriptionValidation.maxValid ? 'valid' : ''}`}>
                 <p>მაქსიმუმ 255 სიმბოლო</p>
               </div>
             </div>
           </label>
           <label>
             <p>პასუხისმგებელი თანამშრომელი*</p>
-            <select className='custom-selecte'>
-              {employees.map(employe => (
-                <option key={employe.id} value={employe.id}>
-                  {employe.name}
+            <select
+              className='custom-selecte'
+              name='assignee'
+              value={formData.assignee}
+              onChange={handleChange}
+              required>
+              <option value=''>აირჩიეთ თანამშრომელი</option>
+              {employees.map(employee => (
+                <option key={employee.id} value={employee.id}>
+                  {employee.name} {employee.surname}
                 </option>
               ))}
             </select>
@@ -145,7 +228,11 @@ const TaskCreate = () => {
                         key={priority.id}
                         className='dropdown-option'
                         onClick={() =>
-                          handlePrioritySelect({ icon: priority.icon, name: priority.name })
+                          handlePrioritySelect({
+                            id: priority.id,
+                            icon: priority.icon,
+                            name: priority.name,
+                          })
                         }>
                         <img src={priority.icon} alt='' /> {priority.name}
                       </div>
@@ -160,7 +247,7 @@ const TaskCreate = () => {
               <select name='status' value={formData.status} onChange={handleChange} required>
                 <option value=''>აირჩიეთ</option>
                 {statuses.map(status => (
-                  <option key={status.id} value={status.name}>
+                  <option key={status.id} value={status.id}>
                     {status.name}
                   </option>
                 ))}
