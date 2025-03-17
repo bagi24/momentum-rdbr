@@ -36,8 +36,8 @@ const TasksList = () => {
     fetchTasks();
   }, []);
 
-  const handleTaskClick = taskId => {
-    navigate(`/task/${taskId}`);
+  const handleTaskClick = task => {
+    navigate(`/task/${task.id}`, { state: { task } }); // Pass the entire task object as state
   };
 
   // ✅ დეპარტამენტის პირველი სიტყვის ამოღება
@@ -78,7 +78,7 @@ const TasksList = () => {
   return (
     <div className='tasks-container'>
       {tasks.map(task => (
-        <div key={task.id} className='task-card' onClick={() => handleTaskClick(task.id)}>
+        <div key={task.id} className='task-card' onClick={() => handleTaskClick(task)}>
           <div className='task-meta'>
             <div className='priority-department'>
               <div className='priority'>
