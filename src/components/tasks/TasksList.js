@@ -24,6 +24,7 @@ const TasksList = () => {
 
         const data = await response.json();
         setTasks(data);
+        console.log(data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
         setError(error.message);
@@ -84,7 +85,9 @@ const TasksList = () => {
                 <img src={task.priority.icon} alt='Priority Icon' />
                 {task.priority.name}
               </div>
-              <div className='department'>{getShortenedWord(task.department.name, 7)}</div>
+              <div className='department'>
+                {getShortenedWord(task.department.name, 7)} (ID: {task.department.id})
+              </div>
             </div>
             <div className='deadline'>{formatDate(task.due_date)}</div>
           </div>

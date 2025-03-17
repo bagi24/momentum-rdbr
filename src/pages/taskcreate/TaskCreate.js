@@ -10,9 +10,15 @@ const TaskCreate = () => {
   const [employees, setEmployees] = useState([]);
   const [priorities, setPriorities] = useState([]);
   const [statuses, setStatuses] = useState([]);
-  const [titleValidation, setTitleValidation] = useState('');
-  const [descriptionValidation, setDescriptionValidation] = useState('');
+  const [titleValidation, setTitleValidation] = useState({ minValid: false, maxValid: false });
+  const [descriptionValidation, setDescriptionValidation] = useState({
+    minValid: false,
+    maxValid: false,
+  });
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
+  const [selectedPriority, setSelectedPriority] = useState({ id: null, icon: null, name: '' });
 
   const [formData, setFormData] = useState({
     title: '',
@@ -24,9 +30,28 @@ const TaskCreate = () => {
     deadline: '',
   });
 
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (formData.department) {
+      const filtered = employees.filter(
+        employee => employee.department.id === parseInt(formData.department)
+      );
+      setFilteredEmployees(filtered);
+    } else {
+      setFilteredEmployees([]);
+    }
+  }, [formData.department, employees]);
+
   const handleChange = e => {
     const { name, value } = e.target;
+
     setFormData(prevState => ({ ...prevState, [name]: value }));
+
+    if (name === 'department') {
+      const filtered = employees.filter(employee => employee.department.id === parseInt(value));
+      setFilteredEmployees(filtered);
+    }
 
     if (name === 'title') {
       setTitleValidation({
@@ -34,6 +59,7 @@ const TaskCreate = () => {
         maxValid: value.length <= 255,
       });
     }
+
     if (name === 'description') {
       setDescriptionValidation({
         minValid: value.length >= 2,
@@ -42,13 +68,11 @@ const TaskCreate = () => {
     }
   };
 
-  const navigate = useNavigate();
-
   const handleSubmit = async e => {
     e.preventDefault();
     setFormSubmitted(true);
 
-    if (!formData.department || !formData.assignee || !selectedPriority.id || !formData.status) {
+    if (!formData.department || !formData.assignee || !selectedPriority?.id || !formData.status) {
       console.log('Please fill all required fields');
       return;
     }
@@ -60,6 +84,7 @@ const TaskCreate = () => {
       employee_id: formData.assignee,
       priority_id: selectedPriority.id,
       status_id: formData.status,
+      department_id: formData.department,
     };
 
     try {
@@ -87,11 +112,8 @@ const TaskCreate = () => {
     }
   };
 
-  const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
-  const [selectedPriority, setSelectedPriority] = useState({ icon: null, name: '' });
-
-  const handlePrioritySelect = ({ id, icon, name }) => {
-    setSelectedPriority({ id, icon, name }); // Include `id` in the selected priority
+  const handlePrioritySelect = priority => {
+    setSelectedPriority(priority);
     setIsPriorityDropdownOpen(false);
   };
 
@@ -191,9 +213,10 @@ const TaskCreate = () => {
               name='assignee'
               value={formData.assignee}
               onChange={handleChange}
+              disabled={!formData.department}
               required>
               <option value=''>აირჩიეთ თანამშრომელი</option>
-              {employees.map(employee => (
+              {filteredEmployees.map(employee => (
                 <option key={employee.id} value={employee.id}>
                   {employee.name} {employee.surname}
                 </option>
@@ -231,13 +254,7 @@ const TaskCreate = () => {
                       <div
                         key={priority.id}
                         className='dropdown-option'
-                        onClick={() =>
-                          handlePrioritySelect({
-                            id: priority.id,
-                            icon: priority.icon,
-                            name: priority.name,
-                          })
-                        }>
+                        onClick={() => handlePrioritySelect(priority)}>
                         <img src={priority.icon} alt='' /> {priority.name}
                       </div>
                     ))}

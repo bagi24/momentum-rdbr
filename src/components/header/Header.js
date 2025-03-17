@@ -11,7 +11,7 @@ const Header = () => {
 
   return (
     <header className='header-container'>
-      <h1 className='logo'>
+      <h1 className='logo' onClick={() => navigate('/')}>
         Momentum <img src={Logo} alt='Logo' />
       </h1>
       <div className='button-group'>
