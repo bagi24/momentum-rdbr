@@ -1,0 +1,43 @@
+.filtered-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 25px;
+}
+
+.filter-item {
+  height: 29px;
+  gap: 4px;
+  border-radius: 43px;
+  border: 1px solid #ced4da;
+  padding-top: 6px;
+  padding-right: 10px;
+  padding-bottom: 6px;
+  padding-left: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-item span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+
+  color: #343a40;
+  font-weight: bold;
+}
+
+.filter-clear {
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background-color: #ffffff;
+}
+
+.filter-clear:focus {
+  cursor: pointer;
+}

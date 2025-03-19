@@ -5,18 +5,23 @@ import Title from '../../components/title/Title';
 import DropdownList from '../../components/dropdown/DropdownList';
 import Status from '../../components/statuses/Status';
 import TasksList from '../../components/tasks/TasksList';
-// import { useLocation } from 'react-router-dom';
+import FilteredTitle from '../../components/filteredtitles/FilteredTitle';
+import { useState } from 'react';
 
 const Home = () => {
-  // const location = useLocation();
-  // const { taskData } = location.state || {}; // Access the passed state
+  const [selectedFilters, setSelectedFilters] = useState({
+    department: '',
+    priority: '',
+    employee: '',
+  });
   return (
     <>
       <Header />
       <Title />
-      <DropdownList />
+      <DropdownList selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+      <FilteredTitle selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
       <Status />
-      <TasksList />
+      <TasksList selectedFilters={selectedFilters} />
     </>
   );
 };

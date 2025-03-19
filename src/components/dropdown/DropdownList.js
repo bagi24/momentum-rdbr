@@ -3,7 +3,7 @@ import './DropdownList.css';
 import Arrow from '../../assets/icons/arrow.png';
 import ClickedArrow from '../../assets/icons/clickedArrow.png';
 
-const DropdownList = () => {
+const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [departments, setDepartments] = useState([]);
   const [priorities, setPriorities] = useState([]);
@@ -17,7 +17,6 @@ const DropdownList = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(`მიღებული მონაცემები (${url}):`, data);
         setState(data);
       } catch (error) {
         console.error(`მონაცემების ჩატვირთვის შეცდომა: ${url}`, error);
@@ -25,9 +24,7 @@ const DropdownList = () => {
     };
 
     fetchData('https://momentum.redberryinternship.ge/api/departments', setDepartments);
-
     fetchData('https://momentum.redberryinternship.ge/api/priorities', setPriorities);
-
     fetchData('https://momentum.redberryinternship.ge/api/employees', setEmployees, {
       headers: {
         Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
@@ -36,27 +33,34 @@ const DropdownList = () => {
   }, []);
 
   const toggleDropdown = name => {
-    console.log(`Clicked on: ${name}`);
-
     setOpenDropdowns(prev => ({
-      ...Object.keys(prev).reduce((acc, key) => {
-        acc[key] = false;
-        return acc;
-      }, {}),
+      ...prev,
       [name]: !prev[name],
     }));
   };
 
+  const handleSelection = (category, value) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [category]: prev[category] === value ? '' : value,
+    }));
+
+    // Close the dropdown after selection
+    setOpenDropdowns(prev => ({
+      ...prev,
+      [category]: false,
+    }));
+  };
+
   const dropdowns = [
-    { name: 'დეპარტამენტი', items: departments.map(dep => dep.name) },
-    { name: 'პრიორიტეტი', items: priorities.map(pri => pri.name) },
+    { name: 'department', label: 'დეპარტამენტი', items: departments.map(dep => dep.name) },
+    { name: 'priority', label: 'პრიორიტეტი', items: priorities.map(pri => pri.name) },
     {
-      name: 'თანამშრომელი',
+      name: 'employee',
+      label: 'თანამშრომელი',
       items: employees.map(emp => `${emp.name} ${emp.surname}`),
     },
   ];
-
-  console.log('Dropdowns data:', dropdowns);
 
   return (
     <div className='dropdown-container'>
@@ -64,7 +68,7 @@ const DropdownList = () => {
         <div key={dropdown.name} className='dropdown'>
           <div className='dropdown-header' onClick={() => toggleDropdown(dropdown.name)}>
             <p>
-              {dropdown.name}{' '}
+              {dropdown.label}{' '}
               <img
                 className='arrow'
                 src={openDropdowns[dropdown.name] ? ClickedArrow : Arrow}
@@ -77,7 +81,13 @@ const DropdownList = () => {
               {dropdown.items.length > 0 ? (
                 dropdown.items.map((item, index) => (
                   <li key={index}>
-                    <input type='checkbox' id={item} name={item} />
+                    <input
+                      type='checkbox'
+                      id={item}
+                      name={item}
+                      checked={selectedFilters[dropdown.name] === item}
+                      onChange={() => handleSelection(dropdown.name, item)}
+                    />
                     <label htmlFor={item}>{item}</label>
                   </li>
                 ))

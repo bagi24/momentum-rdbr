@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import CommentIcon from '../../assets/icons/Comments.png';
 import './TasksList.css';
 
-const TasksList = () => {
+const TasksList = ({ selectedFilters }) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,9 +75,20 @@ const TasksList = () => {
     return <div>Error: {error}</div>;
   }
 
+  // ✅ გაფილტრული დავალებები
+  const filteredTasks = tasks.filter(task => {
+    return (
+      (!selectedFilters.department || task.department.name === selectedFilters.department) &&
+      (!selectedFilters.priority || task.priority.name === selectedFilters.priority) &&
+      (!selectedFilters.employee ||
+        (task.assignee &&
+          `${task.assignee.name} ${task.assignee.surname}` === selectedFilters.employee))
+    );
+  });
+
   return (
     <div className='tasks-container'>
-      {tasks.map(task => (
+      {filteredTasks.map(task => (
         <div key={task.id} className='task-card' onClick={() => handleTaskClick(task)}>
           <div className='task-meta'>
             <div className='priority-department'>
@@ -96,7 +107,11 @@ const TasksList = () => {
             <div className='task-descriptions'>{task.description}</div>
           </div>
           <div className='task-footer'>
-            <img src={task.employee.avatar} alt='Employee Avatar' className='employee-avatar' />
+            <img
+              src={task.employee?.avatar || 'default-avatar-url'}
+              alt='Employee Avatar'
+              className='employee-avatar'
+            />
             <div className='comment-count-num'>
               <img src={CommentIcon} alt='Comment Icon' />
               <span>8</span>
