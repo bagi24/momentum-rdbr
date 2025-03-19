@@ -9,6 +9,8 @@ const TasksList = ({ selectedFilters }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const colors = ['#f7bc30', '#FB5607', '#FF006E', '#3A86FF']; // ფერების მასივი
+
   useEffect(() => {
     const fetchTasks = async () => {
       try {
@@ -88,16 +90,60 @@ const TasksList = ({ selectedFilters }) => {
 
   return (
     <div className='tasks-container'>
-      {filteredTasks.map(task => (
-        <div key={task.id} className='task-card' onClick={() => handleTaskClick(task)}>
+      {filteredTasks.map((task, index) => (
+        <div
+          key={task.id}
+          className='task-card'
+          onClick={() => handleTaskClick(task)}
+          style={{ border: `1px solid ${colors[index % colors.length]}` }} // ფერის განმეორება
+        >
           <div className='task-meta'>
             <div className='priority-department'>
-              <div className='priority'>
+              <div
+                className='priority'
+                style={{
+                  color:
+                    task.priority.name === 'დაბალი'
+                      ? '#08A508'
+                      : task.priority.name === 'საშუალო'
+                      ? '#FFBE0B'
+                      : task.priority.name === 'მაღალი'
+                      ? '#FA4D4D'
+                      : '#FFBE0B',
+                  border:
+                    task.priority.name === 'დაბალი'
+                      ? '0.5px solid #08A508'
+                      : task.priority.name === 'საშუალო'
+                      ? '0.5px solid #FFBE0B'
+                      : task.priority.name === 'მაღალი'
+                      ? '0.5px solid #FA4D4D'
+                      : '0.5px solid #FFBE0B',
+                }}>
                 <img src={task.priority.icon} alt='Priority Icon' />
                 {task.priority.name}
               </div>
-              <div className='department'>
-                {getShortenedWord(task.department.name, 7)} (ID: {task.department.id})
+              <div
+                className='department'
+                style={{
+                  backgroundColor:
+                    task.department.name === 'ადმინისტრაციის დეპარტამენტი'
+                      ? '#ff66a8'
+                      : task.department.name === 'ადამიანური რესურსების დეპარტამენტი'
+                      ? '#fd9a6a'
+                      : task.department.name === 'ფინანსების დეპარტამენტი'
+                      ? '#ffd86d'
+                      : task.department.name === 'გაყიდვები და მარკეტინგის დეპარტამენტი'
+                      ? '#89b6ff'
+                      : task.department.name === 'ლოჯოსტიკის დეპარტამენტი'
+                      ? '#08a508'
+                      : task.department.name === 'ტექნოლოგიების დეპარტამენტი'
+                      ? '#8338ec'
+                      : task.department.name === 'მედიის დეპარტამენტი'
+                      ? '#f7bc30'
+                      : '#FFBE0B',
+                  color: '#ffffff',
+                }}>
+                {getShortenedWord(task.department.name, 7)}
               </div>
             </div>
             <div className='deadline'>{formatDate(task.due_date)}</div>

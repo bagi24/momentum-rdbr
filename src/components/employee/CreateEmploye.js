@@ -98,10 +98,16 @@ const CreateEmploye = () => {
       .catch(error => console.error('Error fetching departments:', error));
   }, []);
 
+  const handleOutsideClick = event => {
+    if (event.target.classList.contains('modal')) {
+      closeModal();
+    }
+  };
+
   return (
     <>
       {isModalOpen && (
-        <div className='modal'>
+        <div className='modal' onClick={handleOutsideClick}>
           <div className='modal-content'>
             <div className='cancel-icon'>
               <img src={CenceleModal} alt='Cancel' className='cancel' onClick={closeModal} />

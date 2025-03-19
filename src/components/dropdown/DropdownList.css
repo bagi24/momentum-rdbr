@@ -42,7 +42,6 @@
 .dropdown-items {
   list-style: none;
   padding: 40px 30px 20px 30px;
-
   border: 0.5px solid #8338ec;
   border-radius: 10px;
   margin-top: 21px;
@@ -63,7 +62,6 @@
   align-items: center;
   gap: 10px;
   padding: 5px 0;
-
   font-family: 'FiraGO', sans-serif;
   font-weight: 400;
   font-size: 16px;
@@ -79,27 +77,108 @@
   border: 1.5px solid #212529;
   gap: 10px;
   padding: 10px;
-
   appearance: none;
   background-color: white;
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.dropdown-items li input:checked {
-  background-color: white;
-  border-color: #212529;
+/* დეპარტამენტებისთვის ფერების მიმაგრება */
+.dropdown-items li:nth-child(1) input {
+  border-color: #ff66a8;
+}
+.dropdown-items li:nth-child(2) input {
+  border-color: #fd9a6a;
+}
+.dropdown-items li:nth-child(3) input {
+  border-color: #ffd86d;
+}
+.dropdown-items li:nth-child(4) input {
+  border-color: #89b6ff;
+}
+.dropdown-items li:nth-child(5) input {
+  border-color: #08a508;
+}
+.dropdown-items li:nth-child(6) input {
+  border-color: #8338ec;
+}
+.dropdown-items li:nth-child(7) input {
+  border-color: #f7bc30;
 }
 
-.dropdown-items li input:checked::before {
+.dropdown-items li input:checked {
+  background-color: white;
+}
+
+.dropdown-items li:nth-child(1) input:checked::before {
   content: '✔';
   display: block;
-  color: #212529;
+  color: #ff66a8;
   font-size: 16px;
   line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
+.dropdown-items li:nth-child(2) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #fd9a6a;
+  font-size: 16px;
+  line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
+.dropdown-items li:nth-child(3) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #ffd86d;
+  font-size: 16px;
+  line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
+.dropdown-items li:nth-child(4) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #89b6ff;
+  font-size: 16px;
+  line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
+.dropdown-items li:nth-child(5) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #08a508;
+  font-size: 16px;
+  line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
 
+.dropdown-items li:nth-child(6) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #8338ec;
+  font-size: 16px;
+  line-height: 1;
+  width: 10.666666984558105;
+  height: 7.333333492279053;
+  border-width: 1.5px;
+}
+
+.dropdown-items li:nth-child(7) input:checked::before {
+  content: '✔';
+  display: block;
+  color: #f7bc30;
+  font-size: 16px;
+  line-height: 1;
   width: 10.666666984558105;
   height: 7.333333492279053;
   border-width: 1.5px;
