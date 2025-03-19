@@ -3,6 +3,7 @@ import Header from '../../components/header/Header';
 import ArrowDown from '../../assets/icons/arrow-down.png';
 import CalendarIcon from '../../assets/icons/calendar-line.png';
 import { useNavigate } from 'react-router-dom';
+import { API_TOKEN } from '../../config/config';
 import './TaskCreate.css';
 
 const TaskCreate = () => {
@@ -93,7 +94,7 @@ const TaskCreate = () => {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+          Authorization: `Bearer ${API_TOKEN}`,
         },
         body: JSON.stringify(taskData),
       });
@@ -126,7 +127,7 @@ const TaskCreate = () => {
           fetch('https://momentum.redberryinternship.ge/api/statuses'),
           fetch('https://momentum.redberryinternship.ge/api/employees', {
             headers: {
-              Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+              Authorization: `Bearer ${API_TOKEN}`,
             },
           }),
         ]);

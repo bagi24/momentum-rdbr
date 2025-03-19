@@ -5,6 +5,7 @@ import DelteAvatar from '../../assets/icons/delteAvatarBtn.png';
 import CenceleModal from '../../assets/icons/Cancel.png';
 import uploadIcon from '../../assets/icons/gallery-export.png';
 import Arrow from '../../assets/icons/arrow.png';
+import { API_TOKEN } from '../../config/config';
 
 const CreateEmploye = () => {
   const [avatar, setAvatar] = useState(Avatar);
@@ -60,13 +61,15 @@ const CreateEmploye = () => {
       formData.append('name', name);
       formData.append('surname', surname);
       formData.append('department_id', department);
-      formData.append('avatar', fileInputRef.current.files[0]); // Append the file
+      if (fileInputRef.current.files[0]) {
+        formData.append('avatar', fileInputRef.current.files[0]);
+      }
 
       try {
         const response = await fetch('https://momentum.redberryinternship.ge/api/employees', {
           method: 'POST',
           headers: {
-            Authorization: `Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3`,
+            Authorization: `Bearer ${API_TOKEN}`,
             Accept: 'application/json', // Include your token
           },
           body: formData, // Send form data

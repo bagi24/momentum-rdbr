@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './DropdownList.css';
 import Arrow from '../../assets/icons/arrow.png';
 import ClickedArrow from '../../assets/icons/clickedArrow.png';
+import { API_TOKEN } from '../../config/config';
+
+console.log(API_TOKEN);
 
 const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
@@ -27,7 +30,7 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
     fetchData('https://momentum.redberryinternship.ge/api/priorities', setPriorities);
     fetchData('https://momentum.redberryinternship.ge/api/employees', setEmployees, {
       headers: {
-        Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3',
+        Authorization: `Bearer ${API_TOKEN}`,
       },
     });
   }, []);
@@ -45,7 +48,6 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
       [category]: prev[category] === value ? '' : value,
     }));
 
-    // Close the dropdown after selection
     setOpenDropdowns(prev => ({
       ...prev,
       [category]: false,
@@ -58,7 +60,12 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
     {
       name: 'employee',
       label: 'თანამშრომელი',
-      items: employees.map(emp => `${emp.name} ${emp.surname}`),
+      items: employees.map(emp => ({
+        id: emp.id,
+        name: emp.name,
+        surname: emp.surname,
+        avatar: emp.avatar,
+      })),
     },
   ];
 
@@ -80,15 +87,34 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
             <ul className='dropdown-items'>
               {dropdown.items.length > 0 ? (
                 dropdown.items.map((item, index) => (
-                  <li key={index}>
+                  <li key={item.id || index}>
                     <input
                       type='checkbox'
-                      id={item}
-                      name={item}
-                      checked={selectedFilters[dropdown.name] === item}
+                      id={item.id || item}
+                      name={item.name || item}
+                      checked={
+                        dropdown.name === 'employee'
+                          ? selectedFilters[dropdown.name]?.id === item.id
+                          : selectedFilters[dropdown.name] === item
+                      }
                       onChange={() => handleSelection(dropdown.name, item)}
                     />
-                    <label htmlFor={item}>{item}</label>
+                    <label htmlFor={item.id || item}>
+                      {dropdown.name === 'employee' ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <img
+                            src={item.avatar}
+                            alt=''
+                            style={{ width: '24px', height: '24px', borderRadius: '50%' }}
+                          />
+                          <span>
+                            {item.name} {item.surname}
+                          </span>
+                        </div>
+                      ) : (
+                        item
+                      )}
+                    </label>
                   </li>
                 ))
               ) : (

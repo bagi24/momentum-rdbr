@@ -11,7 +11,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/createTask' element={<TaskCreate />} />
-          <Route path='/task/:taskId' element={<SpecificTask />} /> {/* დინამიური როუტი */}
+          <Route path='/task/:taskId' element={<SpecificTask />} />
         </Routes>
       </Router>
     </div>

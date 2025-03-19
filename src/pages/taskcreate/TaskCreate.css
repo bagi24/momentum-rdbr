@@ -55,7 +55,7 @@
 .task-create-form label {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 6px !important;
 }
 
 .task-create-form label p {
@@ -276,9 +276,9 @@
 
 .validation .min-val:not(.valid) p,
 .validation .max-val:not(.valid) p {
-  color: red !important; 
+  color: red !important;
 }
 
 .invalid-field option {
-  border: 1px solid red !important; 
+  border: 1px solid red !important;
 }

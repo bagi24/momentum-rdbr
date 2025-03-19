@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CommentIcon from '../../assets/icons/Comments.png';
+import { API_TOKEN } from '../../config/config';
 import './TasksList.css';
 
 const TasksList = ({ selectedFilters }) => {
@@ -9,14 +10,14 @@ const TasksList = ({ selectedFilters }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const colors = ['#f7bc30', '#FB5607', '#FF006E', '#3A86FF']; // ფერების მასივი
+  const colors = ['#f7bc30', '#FB5607', '#FF006E', '#3A86FF'];
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
         const response = await fetch('https://momentum.redberryinternship.ge/api/tasks', {
           headers: {
-            Authorization: 'Bearer 9e71b9d0-5849-4939-ae4d-2d4f0033bec3', // Add your token here
+            Authorization: `Bearer ${API_TOKEN}`,
           },
         });
 
@@ -39,13 +40,30 @@ const TasksList = ({ selectedFilters }) => {
   }, []);
 
   const handleTaskClick = task => {
-    navigate(`/task/${task.id}`, { state: { task } }); // Pass the entire task object as state
+    navigate(`/task/${task.id}`, { state: { task } });
   };
 
-  // ✅ დეპარტამენტის პირველი სიტყვის ამოღება
-  const getShortenedWord = (text, length = 5) => {
-    const firstWord = text.trim().split(/\s+/)[0];
-    return firstWord.length > length ? firstWord.slice(0, length) + '…' : firstWord;
+  const getShortenedWord = text => {
+    switch (text.trim()) {
+      case 'ადმინისტრაციის დეპარტამენტი':
+        return 'ადმინისტრ.';
+      case 'ადამიანური რესურსების დეპარტამენტი':
+        return 'ად.რესურსი';
+      case 'ფინანსების დეპარტამენტი':
+        return 'ფინანსები';
+      case 'გაყიდვები და მარკეტინგის დეპარტამენტი':
+        return 'მარკეტინგი';
+      case 'ლოჯისტიკის დეპარტამენტი':
+        return 'ლოჯისტიკა';
+      case 'ტექნოლოგიების დეპარტამენტი':
+        return 'ინფ.ტექ.';
+      case 'მედიის დეპარტამენტი':
+        return 'მედია';
+      default:
+        // თუ დეპარტამენტი არ არის ზემოთ ჩამოთვლილთა შორის, დააბრუნე პირველი სიტყვა
+        const firstWord = text.trim().split(/\s+/)[0];
+        return firstWord.length > 5 ? firstWord.slice(0, 5) + '…' : firstWord;
+    }
   };
 
   // ✅ თარიღის ფორმატირება - "17 მარტ, 2025"
@@ -70,11 +88,21 @@ const TasksList = ({ selectedFilters }) => {
   };
 
   if (loading) {
-    return <div>Loading tasks...</div>;
+    return (
+      <div className='loading-container'>
+        <div className='loading-spinner'></div>
+        <p className='loading-text'>იტვირთება...</p>
+      </div>
+    );
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return (
+      <div className='error-container'>
+        <div className='error-icon'>❌</div>
+        <p className='error-text'>Error: {error}</p>
+      </div>
+    );
   }
 
   // ✅ გაფილტრული დავალებები
