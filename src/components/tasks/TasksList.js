@@ -9,6 +9,7 @@ const TasksList = ({ selectedFilters }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [commentsCount, setCommentsCount] = useState({});
 
   const colors = ['#f7bc30', '#FB5607', '#FF006E', '#3A86FF'];
 
@@ -27,7 +28,7 @@ const TasksList = ({ selectedFilters }) => {
 
         const data = await response.json();
         setTasks(data);
-        console.log(data);
+        fetchCommentsCount(data);
       } catch (error) {
         console.error('Error fetching tasks:', error);
         setError(error.message);
@@ -38,6 +39,39 @@ const TasksList = ({ selectedFilters }) => {
 
     fetchTasks();
   }, []);
+
+  const fetchCommentsCount = async tasks => {
+    try {
+      const promises = tasks.map(async task => {
+        const response = await fetch(
+          `https://momentum.redberryinternship.ge/api/tasks/${task.id}/comments`,
+          {
+            headers: {
+              Authorization: `Bearer ${API_TOKEN}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          return { id: task.id, count: data.length };
+        } else {
+          console.error('Failed to fetch comments for task:', task.id);
+          return { id: task.id, count: 0 };
+        }
+      });
+
+      const results = await Promise.all(promises);
+      const counts = results.reduce((acc, item) => {
+        acc[item.id] = item.count;
+        return acc;
+      }, {});
+
+      setCommentsCount(counts);
+    } catch (error) {
+      console.error('Error fetching comments count:', error);
+    }
+  };
 
   const handleTaskClick = task => {
     navigate(`/task/${task.id}`, { state: { task } });
@@ -60,13 +94,11 @@ const TasksList = ({ selectedFilters }) => {
       case 'მედიის დეპარტამენტი':
         return 'მედია';
       default:
-        // თუ დეპარტამენტი არ არის ზემოთ ჩამოთვლილთა შორის, დააბრუნე პირველი სიტყვა
         const firstWord = text.trim().split(/\s+/)[0];
         return firstWord.length > 5 ? firstWord.slice(0, 5) + '…' : firstWord;
     }
   };
 
-  // ✅ თარიღის ფორმატირება - "17 მარტ, 2025"
   const formatDate = dateString => {
     const date = new Date(dateString);
     const options = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -105,7 +137,6 @@ const TasksList = ({ selectedFilters }) => {
     );
   }
 
-  // ✅ გაფილტრული დავალებები
   const filteredTasks = tasks.filter(task => {
     return (
       (!selectedFilters.department || task.department.name === selectedFilters.department) &&
@@ -123,8 +154,7 @@ const TasksList = ({ selectedFilters }) => {
           key={task.id}
           className='task-card'
           onClick={() => handleTaskClick(task)}
-          style={{ border: `1px solid ${colors[index % colors.length]}` }} // ფერის განმეორება
-        >
+          style={{ border: `1px solid ${colors[index % colors.length]}` }}>
           <div className='task-meta'>
             <div className='priority-department'>
               <div
@@ -188,8 +218,7 @@ const TasksList = ({ selectedFilters }) => {
             />
             <div className='comment-count-num'>
               <img src={CommentIcon} alt='Comment Icon' />
-              <span>8</span>
-              {/* {task.comments_count} */}
+              <span>{commentsCount[task.id] || 0}</span>
             </div>
           </div>
         </div>
