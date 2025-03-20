@@ -4,7 +4,7 @@ import CommentIcon from '../../assets/icons/Comments.png';
 import { API_TOKEN } from '../../config/config';
 import './TasksList.css';
 
-const TasksList = ({ selectedFilters }) => {
+const TasksList = ({ appliedFilters }) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -137,14 +137,19 @@ const TasksList = ({ selectedFilters }) => {
     );
   }
 
+ 
+
   const filteredTasks = tasks.filter(task => {
-    return (
-      (!selectedFilters.department || task.department.name === selectedFilters.department) &&
-      (!selectedFilters.priority || task.priority.name === selectedFilters.priority) &&
-      (!selectedFilters.employee ||
-        (task.assignee &&
-          `${task.assignee.name} ${task.assignee.surname}` === selectedFilters.employee))
-    );
+    const isDepartmentMatch =
+      appliedFilters.department.length === 0 ||
+      appliedFilters.department.includes(task.department.name);
+    const isPriorityMatch =
+      appliedFilters.priority.length === 0 || appliedFilters.priority.includes(task.priority.name);
+    const isEmployeeMatch =
+      appliedFilters.employee.length === 0 ||
+      appliedFilters.employee.some(emp => emp.id === task.employee.id);
+
+    return isDepartmentMatch && isPriorityMatch && isEmployeeMatch;
   });
 
   return (

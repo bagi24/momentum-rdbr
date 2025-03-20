@@ -10,18 +10,36 @@ import { useState } from 'react';
 
 const Home = () => {
   const [selectedFilters, setSelectedFilters] = useState({
-    department: '',
-    priority: '',
-    employee: '',
+    department: [],
+    priority: [],
+    employee: [],
   });
+  const [appliedFilters, setAppliedFilters] = useState({
+    department: [],
+    priority: [],
+    employee: [],
+  });
+
+  const handleApplyFilters = () => {
+    setAppliedFilters(selectedFilters);
+  };
   return (
     <>
       <Header />
       <Title />
-      <DropdownList selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
-      <FilteredTitle selectedFilters={selectedFilters} setSelectedFilters={setSelectedFilters} />
+      <DropdownList
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+        setAppliedFilters={setAppliedFilters}
+        handleApplyFilters={handleApplyFilters}
+      />
+      <FilteredTitle
+        selectedFilters={selectedFilters}
+        setSelectedFilters={setSelectedFilters}
+        handleApplyFilters={handleApplyFilters}
+      />
       <Status />
-      <TasksList selectedFilters={selectedFilters} />
+      <TasksList appliedFilters={appliedFilters} />
     </>
   );
 };

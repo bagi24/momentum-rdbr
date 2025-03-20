@@ -4,9 +4,7 @@ import Arrow from '../../assets/icons/arrow.png';
 import ClickedArrow from '../../assets/icons/clickedArrow.png';
 import { API_TOKEN } from '../../config/config';
 
-console.log(API_TOKEN);
-
-const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
+const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [departments, setDepartments] = useState([]);
   const [priorities, setPriorities] = useState([]);
@@ -36,27 +34,39 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
   }, []);
 
   const toggleDropdown = name => {
-    setOpenDropdowns(prev => {
-      const isCurrentlyOpen = prev[name];
+    setOpenDropdowns(prev => ({
+      department: false,
+      priority: false,
+      employee: false,
+      [name]: !prev[name],
+    }));
+  };
+
+  const handleSelection = (category, value) => {
+    setSelectedFilters(prev => {
+      const currentSelection = prev[category] || [];
+      const newSelection =
+        category === 'employee'
+          ? currentSelection.some(emp => emp.id === value.id)
+            ? currentSelection.filter(emp => emp.id !== value.id)
+            : [...currentSelection, value]
+          : currentSelection.includes(value)
+          ? currentSelection.filter(item => item !== value)
+          : [...currentSelection, value];
       return {
-        department: false,
-        priority: false,
-        employee: false,
-        [name]: !isCurrentlyOpen,
+        ...prev,
+        [category]: newSelection,
       };
     });
   };
 
-  const handleSelection = (category, value) => {
-    setSelectedFilters(prev => ({
-      ...prev,
-      [category]: prev[category] === value ? '' : value,
-    }));
-
-    setOpenDropdowns(prev => ({
-      ...prev,
-      [category]: false,
-    }));
+  const handleApplyFilters = () => {
+    setAppliedFilters(selectedFilters);
+    setOpenDropdowns({
+      department: false,
+      priority: false,
+      employee: false,
+    });
   };
 
   const dropdowns = [
@@ -66,7 +76,7 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
       name: 'employee',
       label: 'თანამშრომელი',
       items: employees.map(emp => ({
-        id: emp.id,
+        id: emp.id, // Ensure `id` is included
         name: emp.name,
         surname: emp.surname,
         avatar: emp.avatar,
@@ -99,8 +109,8 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
                       name={item.name || item}
                       checked={
                         dropdown.name === 'employee'
-                          ? selectedFilters[dropdown.name]?.id === item.id
-                          : selectedFilters[dropdown.name] === item
+                          ? selectedFilters[dropdown.name]?.some(emp => emp.id === item.id)
+                          : selectedFilters[dropdown.name]?.includes(item)
                       }
                       onChange={() => handleSelection(dropdown.name, item)}
                     />
@@ -125,6 +135,9 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
               ) : (
                 <li>No items available</li>
               )}
+              <button className='choose-btn' onClick={handleApplyFilters}>
+                არჩევა
+              </button>
             </ul>
           )}
         </div>
