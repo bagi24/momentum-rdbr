@@ -174,7 +174,7 @@ function SpecificTask() {
             </div>
           </div>
         </div>
-        <CommentSection />
+        <CommentSection taskId={task.id} /> {/* გადაეცემა task.id როგორც რიცხვი */}
       </div>
     </>
   );
