@@ -107,6 +107,7 @@ const CreateEmploye = ({ onClose }) => {
           console.log('Employee added successfully!');
           resetForm();
           setIsModalOpen(false);
+          window.location.reload();
         } else {
           console.error('Failed to add employee:', await response.text());
         }

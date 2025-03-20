@@ -9,9 +9,14 @@ const Header = () => {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
 
+  const handleLogoClick = () => {
+    navigate('/');
+    window.location.reload(); // გვერდის განახლება
+  };
+
   return (
     <header className='header-container'>
-      <h1 className='logo' onClick={() => navigate('/')}>
+      <h1 className='logo' onClick={handleLogoClick}>
         Momentum <img src={Logo} alt='Logo' />
       </h1>
       <div className='button-group'>

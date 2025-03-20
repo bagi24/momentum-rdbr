@@ -167,7 +167,7 @@
   width: 50px;
   height: 50px;
   border: 6px solid rgba(255, 255, 255, 0.3);
-  border-top: 6px solid #007bff;
+  border-top: 6px solid #8338ec;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 15px;
@@ -176,7 +176,7 @@
 .loading-text {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #555;
+  color: #8338ec;
   animation: pulse 1.5s infinite;
 }
 

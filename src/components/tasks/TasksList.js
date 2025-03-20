@@ -137,8 +137,6 @@ const TasksList = ({ appliedFilters }) => {
     );
   }
 
- 
-
   const filteredTasks = tasks.filter(task => {
     const isDepartmentMatch =
       appliedFilters.department.length === 0 ||

@@ -4,6 +4,8 @@ import ArrowDown from '../../assets/icons/arrow-down.png';
 import CalendarIcon from '../../assets/icons/calendar-line.png';
 import { useNavigate } from 'react-router-dom';
 import { API_TOKEN } from '../../config/config';
+import CreateEmploye from '../../components/employee/CreateEmploye';
+import CustomDropdown from '../../components/dropdowncustom/CustomDropdown';
 import './TaskCreate.css';
 
 const TaskCreate = () => {
@@ -20,6 +22,7 @@ const TaskCreate = () => {
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [isPriorityDropdownOpen, setIsPriorityDropdownOpen] = useState(false);
   const [selectedPriority, setSelectedPriority] = useState({ id: null, icon: null, name: '' });
+  const [showModal, setShowModal] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -32,6 +35,14 @@ const TaskCreate = () => {
   });
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const formattedDate = tomorrow.toISOString().split('T')[0];
+
+    setFormData(prevState => ({ ...prevState, deadline: formattedDate }));
+  }, []);
 
   useEffect(() => {
     if (formData.department) {
@@ -209,20 +220,13 @@ const TaskCreate = () => {
           </label>
           <label>
             <p>პასუხისმგებელი თანამშრომელი*</p>
-            <select
-              className='custom-selecte'
-              name='assignee'
+            <CustomDropdown
+              options={filteredEmployees}
               value={formData.assignee}
               onChange={handleChange}
               disabled={!formData.department}
-              required>
-              <option value=''>აირჩიეთ თანამშრომელი</option>
-              {filteredEmployees.map(employee => (
-                <option key={employee.id} value={employee.id}>
-                  {employee.name} {employee.surname}
-                </option>
-              ))}
-            </select>
+              showModal={() => setShowModal(true)}
+            />
           </label>
         </div>
         <div className='line'>
@@ -282,15 +286,14 @@ const TaskCreate = () => {
               <p> დედლაინი</p>
               <div className='date-picker-container'>
                 <img src={CalendarIcon} alt='Calendar Icon' className='calendar-icon' />
+
                 <input
                   className='input-deadline'
-                  type='text'
+                  type='date'
                   name='deadline'
-                  placeholder='DD/MM/YYYY'
                   value={formData.deadline}
+                  min={new Date().toISOString().split('T')[0]}
                   onChange={handleChange}
-                  onFocus={e => (e.target.type = 'date')}
-                  onBlur={e => (e.target.type = 'text')}
                 />
               </div>
             </label>
@@ -302,6 +305,7 @@ const TaskCreate = () => {
           </button>
         </div>
       </form>
+      {showModal && <CreateEmploye onClose={() => setShowModal(false)} />}
     </>
   );
 };

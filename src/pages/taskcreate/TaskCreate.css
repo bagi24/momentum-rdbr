@@ -184,6 +184,7 @@
   letter-spacing: 0%;
   color: #ffffff;
   cursor: pointer;
+  border: none;
 }
 
 .task-create-form button:hover {
@@ -291,4 +292,18 @@
 
 .invalid-field option {
   border: 1px solid red !important;
+}
+
+.add-employee {
+  font-family: 'FiraGO', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: #8338ec;
+  cursor: pointer;
+}
+
+.add-employee:hover {
+  color: #d9a721;
 }
