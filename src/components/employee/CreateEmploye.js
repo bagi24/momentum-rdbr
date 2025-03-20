@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './CreateEmploye.css';
-import Avatar from '../../assets/images/Flag_of_Georgia.svg.png';
 import DelteAvatar from '../../assets/icons/delteAvatarBtn.png';
 import CenceleModal from '../../assets/icons/Cancel.png';
 import uploadIcon from '../../assets/icons/gallery-export.png';
 import Arrow from '../../assets/icons/arrow.png';
 import { API_TOKEN } from '../../config/config';
 
-const CreateEmploye = () => {
-  const [avatar, setAvatar] = useState(Avatar);
+const CreateEmploye = ({ onClose }) => {
+  const [avatar, setAvatar] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(true);
   const [departments, setDepartments] = useState([]);
   const fileInputRef = React.useRef(null);
@@ -21,19 +20,39 @@ const CreateEmploye = () => {
   const [department, setDepartment] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
 
+  const nameRegex = /^[A-Za-zა-ჰ\s]+$/;
+
   const validateFirstName = value => {
     setName(value);
-    setFirstNameValid(value.length >= 2 && value.length <= 255);
+    const isValidLength = value.length >= 2 && value.length <= 255;
+    const isValidCharacters = nameRegex.test(value);
+    setFirstNameValid(isValidLength && isValidCharacters);
   };
 
   const validateLastName = value => {
     setSurname(value);
-    setLastNameValid(value.length >= 2 && value.length <= 255);
+    const isValidLength = value.length >= 2 && value.length <= 255;
+    const isValidCharacters = nameRegex.test(value);
+    setLastNameValid(isValidLength && isValidCharacters);
   };
 
   const handleAvatarChange = event => {
     const file = event.target.files[0];
+
     if (file) {
+      const maxSizeKB = 600;
+      const maxSizeBytes = maxSizeKB * 1024;
+
+      if (!file.type.startsWith('image/')) {
+        alert('ფაილი უნდა იყოს სურათის ტიპის (JPEG, PNG და სხვა)');
+        return;
+      }
+
+      if (file.size > maxSizeBytes) {
+        alert(`ფაილის ზომა არ უნდა აღემატებოდეს ${maxSizeKB}KB-ს.`);
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatar(reader.result);
@@ -47,8 +66,18 @@ const CreateEmploye = () => {
     fileInputRef.current.click();
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
+  const resetForm = () => {
+    setName('');
+    setSurname('');
+    setFirstNameValid(false);
+    setLastNameValid(false);
+    setAvatar('');
+    setAvatarValid(false);
+    setDepartment('');
+    setFormSubmitted(false);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleSubmit = async e => {
@@ -56,7 +85,6 @@ const CreateEmploye = () => {
     setFormSubmitted(true);
 
     if (firstNameValid && lastNameValid && avatarValid && department) {
-      // Prepare the form data
       const formData = new FormData();
       formData.append('name', name);
       formData.append('surname', surname);
@@ -70,17 +98,14 @@ const CreateEmploye = () => {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${API_TOKEN}`,
-            Accept: 'application/json', // Include your token
+            Accept: 'application/json',
           },
-          body: formData, // Send form data
+          body: formData,
         });
 
         if (response.ok) {
           console.log('Employee added successfully!');
-          for (let [key, value] of formData.entries()) {
-            console.log(key, value);
-          }
-          // Close the modal or reset the form
+          resetForm();
           setIsModalOpen(false);
         } else {
           console.error('Failed to add employee:', await response.text());
@@ -94,7 +119,6 @@ const CreateEmploye = () => {
   };
 
   useEffect(() => {
-    // Fetch departments from the API
     fetch('https://momentum.redberryinternship.ge/api/departments')
       .then(response => response.json())
       .then(data => setDepartments(data))
@@ -103,7 +127,7 @@ const CreateEmploye = () => {
 
   const handleOutsideClick = event => {
     if (event.target.classList.contains('modal')) {
-      closeModal();
+      onClose();
     }
   };
 
@@ -113,7 +137,7 @@ const CreateEmploye = () => {
         <div className='modal' onClick={handleOutsideClick}>
           <div className='modal-content'>
             <div className='cancel-icon'>
-              <img src={CenceleModal} alt='Cancel' className='cancel' onClick={closeModal} />
+              <img src={CenceleModal} alt='Cancel' className='cancel' onClick={onClose} />
             </div>
 
             <h2 className='modal-title'>თანამშრომლის დამატება</h2>
@@ -129,13 +153,20 @@ const CreateEmploye = () => {
                     className={formSubmitted && !firstNameValid ? 'invalid-field' : ''}
                   />
                   <div className='validation'>
-                    <div className={`min ${name.length >= 2 ? 'valid' : ''}`}>
+                    <div className={`min ${name.length >= 2 ? 'valid' : 'invalid'}`}>
                       <img src={Arrow} alt='' />
                       <p> მინიმუმ 2 სიმბოლო</p>
                     </div>
-                    <div className={`max ${name.length <= 255 ? 'valid' : ''}`}>
+                    <div
+                      className={`max ${
+                        name.length <= 255 && name.length > 0 ? 'valid' : 'invalid'
+                      }`}>
                       <img src={Arrow} alt='' />
                       <p>მაქსიმუმ 255 სიმბოლო</p>
+                    </div>
+                    <div className={`characters ${nameRegex.test(name) ? 'valid' : 'invalid'}`}>
+                      <img src={Arrow} alt='' />
+                      <p>ლათინური და ქართული სიმბოლოები</p>
                     </div>
                   </div>
                 </div>
@@ -150,13 +181,20 @@ const CreateEmploye = () => {
                     className={formSubmitted && !lastNameValid ? 'invalid-field' : ''}
                   />
                   <div className='validation'>
-                    <div className={`min ${surname.length >= 2 ? 'valid' : ''}`}>
+                    <div className={`min ${surname.length >= 2 ? 'valid' : 'invalid'}`}>
                       <img src={Arrow} alt='' />
                       <p> მინიმუმ 2 სიმბოლო</p>
                     </div>
-                    <div className={`max ${surname.length <= 255 ? 'valid' : ''}`}>
+                    <div
+                      className={`max ${
+                        surname.length <= 255 && surname.length > 0 ? 'valid' : 'invalid'
+                      }`}>
                       <img src={Arrow} alt='' />
                       <p>მაქსიმუმ 255 სიმბოლო</p>
+                    </div>
+                    <div className={`characters ${nameRegex.test(surname) ? 'valid' : 'invalid'}`}>
+                      <img src={Arrow} alt='' />
+                      <p>ლათინური და ქართული სიმბოლოები</p>
                     </div>
                   </div>
                 </div>
@@ -164,14 +202,12 @@ const CreateEmploye = () => {
               <div className='avatar-group-con'>
                 <p>ავატარი*</p>
                 <div className='form-group avatar-group'>
-                  {!avatar || avatar === Avatar ? (
-                    <div
-                      className={`initial-state ${
-                        formSubmitted && !avatarValid ? 'invalid-field' : ''
-                      }`}
-                      onClick={triggerFileSelect}>
+                  {!avatar || avatar === '' ? (
+                    <div className={`initial-state `} onClick={triggerFileSelect}>
                       <img src={uploadIcon} alt='Upload Avatar' />
-                      <p>ატვირთეთ ფოტო</p>
+                      <p className={`${formSubmitted && !avatarValid ? 'invalid-field-p' : ''}`}>
+                        ატვირთეთ ფოტო
+                      </p>
                     </div>
                   ) : (
                     <>
@@ -211,7 +247,7 @@ const CreateEmploye = () => {
                 </select>
               </div>
               <div className='form-actions'>
-                <button type='button' className='cancel-btn' onClick={closeModal}>
+                <button type='button' className='cancel-btn' onClick={onClose}>
                   გაუქმება
                 </button>
                 <button type='submit' className='submit-btn'>

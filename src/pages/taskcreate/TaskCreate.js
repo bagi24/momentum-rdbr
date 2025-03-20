@@ -154,7 +154,7 @@ const TaskCreate = () => {
   return (
     <>
       <Header />
-      <span>შექმენი ახალი დავალება</span>
+      <h1 className='headline'>შექმენი ახალი დავალება</h1>
       <form className='task-create-form' onSubmit={handleSubmit}>
         <div className='line'>
           <label className='label-line-1'>

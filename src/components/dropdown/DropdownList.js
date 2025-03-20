@@ -36,10 +36,15 @@ const DropdownList = ({ setSelectedFilters, selectedFilters }) => {
   }, []);
 
   const toggleDropdown = name => {
-    setOpenDropdowns(prev => ({
-      ...prev,
-      [name]: !prev[name],
-    }));
+    setOpenDropdowns(prev => {
+      const isCurrentlyOpen = prev[name];
+      return {
+        department: false,
+        priority: false,
+        employee: false,
+        [name]: !isCurrentlyOpen,
+      };
+    });
   };
 
   const handleSelection = (category, value) => {

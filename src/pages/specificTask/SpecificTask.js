@@ -6,7 +6,7 @@ import StatusIcon from '../../assets/icons/pie-chart.png';
 import EmployeIcon from '../../assets/icons/Frame 1000005864.png';
 import CalendarIcon from '../../assets/icons/calendar.png';
 import CommentSection from '../../components/comments/CommentSection';
-
+import { API_TOKEN } from '../../config/config';
 import './SpecificTask.css';
 
 function SpecificTask() {
@@ -14,13 +14,7 @@ function SpecificTask() {
   const task = location.state?.task;
 
   const [statuses, setStatuses] = useState([]);
-  const [formData, setFormData] = useState({
-    status: '',
-  });
-
-  const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const [selectedStatusId, setSelectedStatusId] = useState(task?.status.id || '');
 
   useEffect(() => {
     fetch('https://momentum.redberryinternship.ge/api/statuses')
@@ -28,6 +22,42 @@ function SpecificTask() {
       .then(data => setStatuses(data))
       .catch(error => console.error('Error fetching statuses:', error));
   }, []);
+
+  useEffect(() => {
+    if (selectedStatusId && selectedStatusId !== task.status.id) {
+      updateTaskStatus(task.id, selectedStatusId);
+    }
+  }, [selectedStatusId]);
+
+  const updateTaskStatus = async (taskId, statusId) => {
+    try {
+      const response = await fetch(`https://momentum.redberryinternship.ge/api/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${API_TOKEN}`,
+        },
+        body: JSON.stringify({ status_id: statusId }),
+      });
+
+      if (response.ok) {
+        console.log('Task status updated successfully!');
+        alert('სტატუსი წარმატებით განახლდა!');
+      } else {
+        console.error('Failed to update task status:', await response.text());
+        alert('სტატუსის განახლება ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა.');
+      }
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      alert('მოხდა შეცდომა სტატუსის განახლებისას.');
+    }
+  };
+
+  const handleStatusChange = e => {
+    const newStatusId = e.target.value;
+    setSelectedStatusId(newStatusId);
+  };
 
   if (!task) {
     return <div>Task not found</div>;
@@ -109,13 +139,12 @@ function SpecificTask() {
                 </div>
                 <div className='task-status-api'>
                   <select
-                    name='status-get'
-                    value={formData.status}
-                    onChange={handleChange}
+                    name='status'
+                    value={selectedStatusId}
+                    onChange={handleStatusChange}
                     required>
-                    <option value=''>{task.status.name}</option>
                     {statuses.map(status => (
-                      <option key={status.id} value={status.name}>
+                      <option key={status.id} value={status.id}>
                         {status.name}
                       </option>
                     ))}
