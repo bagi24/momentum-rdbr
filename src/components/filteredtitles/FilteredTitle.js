@@ -1,14 +1,21 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import XIcon from '../../assets/icons/x.png';
 import './FilteredTitle.css';
 
-const FilteredTitle = ({ selectedFilters, setSelectedFilters, handleApplyFilters }) => {
+const FilteredTitle = ({
+  selectedFilters,
+  setSelectedFilters,
+  handleApplyFilters,
+  setAppliedFilters,
+}) => {
   const handleRemoveFilter = (filterKey, value) => {
     const updatedFilters = {
       ...selectedFilters,
       [filterKey]: selectedFilters[filterKey].filter(item => item !== value),
     };
+
     setSelectedFilters(updatedFilters);
+    setAppliedFilters(updatedFilters);
   };
 
   const handleClear = () => {
@@ -18,16 +25,13 @@ const FilteredTitle = ({ selectedFilters, setSelectedFilters, handleApplyFilters
       employee: [],
     };
     setSelectedFilters(clearedFilters);
+    setAppliedFilters(clearedFilters);
   };
 
   const isAnyFilterSelected =
     selectedFilters.department.length > 0 ||
     selectedFilters.priority.length > 0 ||
     selectedFilters.employee.length > 0;
-
-  useEffect(() => {
-    handleApplyFilters();
-  }, [selectedFilters, handleApplyFilters]);
 
   return (
     <div className='filtered-tile'>

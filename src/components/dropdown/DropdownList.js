@@ -4,7 +4,7 @@ import Arrow from '../../assets/icons/arrow.png';
 import ClickedArrow from '../../assets/icons/clickedArrow.png';
 import { API_TOKEN } from '../../config/config';
 
-const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }) => {
+const DropdownList = ({ setSelectedFilters, selectedFilters, handleApplyFilters }) => {
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [departments, setDepartments] = useState([]);
   const [priorities, setPriorities] = useState([]);
@@ -60,13 +60,9 @@ const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }
     });
   };
 
-  const handleApplyFilters = () => {
-    setAppliedFilters(selectedFilters);
-    setOpenDropdowns({
-      department: false,
-      priority: false,
-      employee: false,
-    });
+  const handleApplyAndCloseDropdown = () => {
+    handleApplyFilters();
+    setOpenDropdowns({ department: false, priority: false, employee: false });
   };
 
   const dropdowns = [
@@ -135,7 +131,7 @@ const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }
               ) : (
                 <li>თანამშრომელთა სია ცარიელია</li>
               )}
-              <button className='choose-btn' onClick={handleApplyFilters}>
+              <button className='choose-btn' onClick={handleApplyAndCloseDropdown}>
                 არჩევა
               </button>
             </ul>

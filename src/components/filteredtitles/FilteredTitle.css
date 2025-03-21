@@ -4,6 +4,7 @@
   justify-content: center;
   gap: 8px;
   margin-top: 25px;
+  height: 50px;
 }
 
 .filter-item {
@@ -41,7 +42,6 @@
 .filter-clear:focus {
   cursor: pointer;
 }
-
 
 @media (max-width: 768px) {
   .filtered-tile {

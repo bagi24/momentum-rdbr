@@ -23,6 +23,7 @@ const Home = () => {
   const handleApplyFilters = () => {
     setAppliedFilters(selectedFilters);
   };
+
   return (
     <>
       <Header />
@@ -30,13 +31,13 @@ const Home = () => {
       <DropdownList
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
-        setAppliedFilters={setAppliedFilters}
         handleApplyFilters={handleApplyFilters}
       />
       <FilteredTitle
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
         handleApplyFilters={handleApplyFilters}
+        setAppliedFilters={setAppliedFilters}
       />
       <Status />
       <TasksList appliedFilters={appliedFilters} />
