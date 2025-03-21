@@ -27,7 +27,7 @@ function SpecificTask() {
     if (selectedStatusId && selectedStatusId !== task.status.id) {
       updateTaskStatus(task.id, selectedStatusId);
     }
-  }, [selectedStatusId]);
+  }, [selectedStatusId, task?.id, task?.status?.id]);
 
   const updateTaskStatus = async (taskId, statusId) => {
     try {

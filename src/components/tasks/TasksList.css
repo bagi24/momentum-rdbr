@@ -303,3 +303,24 @@
     align-items: flex-start;
   }
 }
+
+.no-results {
+  text-align: center;
+  font-size: 20px;
+
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+
+  margin: 20px auto;
+  max-width: 100%;
+}
+
+.no-results p {
+  margin: 0;
+  color: #8338ec;
+}
+
+.no-results p::before {
+  content: '🔍';
+  font-size: 24px;
+}
