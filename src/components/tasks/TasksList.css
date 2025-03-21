@@ -152,10 +152,8 @@
   height: 22px;
 }
 
-/* ლოდინის კონტეინერის სტილი */
 .loading-container {
   display: flex;
-
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -201,7 +199,6 @@
   }
 }
 
-/* შეცდომის კონტეინერი */
 .error-container {
   display: flex;
   flex-direction: column;
@@ -216,14 +213,12 @@
   animation: shake 0.5s ease-in-out;
 }
 
-/* შეცდომის ხატულა */
 .error-icon {
   font-size: 3rem;
   margin-bottom: 10px;
   color: #ff4d4d;
 }
 
-/* შეცდომის ტექსტი */
 .error-text {
   font-size: 1.2rem;
   font-weight: bold;
@@ -246,5 +241,65 @@
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .tasks-container {
+    gap: 30px;
+    justify-content: center;
+  }
+
+  .task-card {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+    padding: 15px;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .priority,
+  .department {
+    width: 80%;
+    font-size: 11px;
+  }
+
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .tasks-container {
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .task-card {
+    width: 100%;
+    height: auto;
+    padding: 10px;
+  }
+
+  .task-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .priority,
+  .department {
+    width: 90%;
+    font-size: 10px;
+  }
+
+  .task-footer {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

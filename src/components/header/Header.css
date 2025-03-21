@@ -66,3 +66,60 @@
 .btn:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 20px 0;
+  }
+
+  .logo {
+    font-size: 28px;
+  }
+
+  .button-group {
+    gap: 20px;
+  }
+
+  .btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .btn.primary {
+    width: 180px;
+    height: 35px;
+  }
+
+  .btn.secondary {
+    width: 200px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px 0;
+  }
+
+  .logo {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .btn.primary {
+    width: 100%;
+    height: 40px;
+  }
+
+  .btn.secondary {
+    width: 100%;
+    height: 42px;
+  }
+}

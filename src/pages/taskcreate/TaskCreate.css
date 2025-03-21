@@ -42,6 +42,7 @@
 
   width: 1261px;
 }
+
 .left-3 {
   display: flex;
   align-items: center;
@@ -56,6 +57,7 @@
   flex-direction: column;
   gap: 6px;
 }
+
 .right-3 {
   display: flex;
   align-items: center;
@@ -149,6 +151,7 @@
 .input-deadline[type='date'] {
   appearance: none;
 }
+
 .task-create-form textarea {
   width: 550px;
   height: 133px;
@@ -157,6 +160,7 @@
   gap: 10px;
   padding: 14px;
 }
+
 .task-create-form select {
   width: 259px;
   height: 45px;
@@ -306,4 +310,120 @@
 
 .add-employee:hover {
   color: #d9a721;
+}
+
+@media (max-width: 1200px) {
+  .task-create-form {
+    width: 100%;
+    height: auto;
+    padding: 40px;
+  }
+
+  .line,
+  .line-btn {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .left-3,
+  .right-3 {
+    width: 100%;
+    gap: 20px;
+  }
+
+  .task-create-form input,
+  .task-create-form textarea,
+  .task-create-form select,
+  .task-create-form .custom-selecte,
+  .input-deadline {
+    width: 100%;
+  }
+
+  .task-create-form button {
+    width: 100%;
+  }
+
+  .headline {
+    font-size: 28px;
+  }
+
+  .dropdown-options {
+    width: 100%;
+  }
+
+  .custom-dropdown {
+    width: 100%;
+  }
+
+  .task-create-form label p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 768px) {
+  .task-create-form {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .line,
+  .line-btn {
+    width: 100%;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .task-create-form input,
+  .task-create-form textarea,
+  .task-create-form select,
+  .task-create-form .custom-selecte,
+  .input-deadline {
+    width: 100%;
+  }
+
+  .task-create-form button {
+    width: 100%;
+    font-size: 16px;
+  }
+
+  .headline {
+    font-size: 24px;
+  }
+
+  .task-create-form label p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-create-form {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .headline {
+    font-size: 20px;
+  }
+
+  .task-create-form label p {
+    font-size: 12px;
+  }
+
+  .task-create-form input,
+  .task-create-form textarea,
+  .task-create-form select,
+  .task-create-form .custom-selecte,
+  .input-deadline {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .task-create-form button {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .dropdown-options {
+    width: 100%;
+  }
 }

@@ -8,9 +8,7 @@
 
 .status-button {
   border: none;
-
   cursor: pointer;
-
   width: 381px;
   height: 54px;
   border-radius: 10px;
@@ -29,16 +27,51 @@
 .status-0 {
   background-color: #f7bc30;
 }
+
 .status-1 {
   background-color: #fb5607;
 }
+
 .status-2 {
   background-color: #ff006e;
 }
+
 .status-3 {
   background-color: #3a86ff;
 }
 
 .status-button:hover {
   opacity: 0.8;
+}
+
+
+@media (max-width: 768px) {
+  .status-container {
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .status-button {
+    width: 250px;
+    height: 45px;
+    font-size: 18px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-container {
+    gap: 15px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .status-button {
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
 }

@@ -41,3 +41,48 @@
 .filter-clear:focus {
   cursor: pointer;
 }
+
+
+@media (max-width: 768px) {
+  .filtered-tile {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-item {
+    width: 100%;
+    justify-content: space-between;
+    padding: 8px 12px;
+  }
+
+  .filter-item span {
+    font-size: 12px;
+  }
+
+  .filter-clear {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .filtered-tile {
+    margin-top: 15px;
+  }
+
+  .filter-item {
+    width: 100%;
+    height: 35px;
+    gap: 8px;
+    padding: 8px 15px;
+  }
+
+  .filter-item span {
+    font-size: 14px;
+  }
+
+  .filter-clear {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+}

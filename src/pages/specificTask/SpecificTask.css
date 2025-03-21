@@ -11,7 +11,6 @@
   align-items: flex-start;
   justify-content: start;
   flex-direction: column;
-
   width: 715px;
 }
 
@@ -28,20 +27,16 @@
   align-items: center;
   justify-content: center;
   gap: 6.25px;
-
   font-family: 'FiraGO', sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 150%;
-  letter-spacing: 0%;
-
   width: 106px;
   height: 32px;
   padding-top: 4px;
   padding-right: 5px;
   padding-bottom: 4px;
   padding-left: 5px;
-
   border-radius: 3px;
 }
 
@@ -60,12 +55,10 @@
   gap: 10px;
   border-radius: 15px;
   background-color: #ff66a8;
-
   font-family: 'FiraGO', sans-serif;
   font-weight: 400;
   font-size: 12px;
   line-height: 100%;
-  letter-spacing: 0%;
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -85,11 +78,10 @@
   font-weight: 400;
   font-size: 18px;
   line-height: 150%;
-  letter-spacing: 0%;
-  width: 100%;
-
   text-align: left;
+  width: 100%;
 }
+
 .task-detalies {
   display: flex;
   align-items: flex-start;
@@ -100,21 +92,18 @@
 
 .task-detalies-title {
   font-family: 'FiraGO', sans-serif;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 100%;
-  letter-spacing: 0%;
   font-weight: bold;
+  font-size: 24px;
   color: #2a2a2a;
 }
+
 .task-title {
   font-family: 'Inter', sans-serif !important;
   font-weight: 600 !important;
   font-size: 34px !important;
-  line-height: 100% !important;
-  letter-spacing: 0% !important;
   color: #212529 !important;
 }
+
 .task-detalie-info {
   display: flex;
   align-items: center;
@@ -127,18 +116,17 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 23px 0px 23px 0px;
-
+  padding: 23px 0;
   font-family: 'FiraGO', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  line-height: 150%;
-  letter-spacing: 0%;
   color: #474747;
 }
+
 .task-status-api {
-  padding: 23px 0px 23px 0px;
+  padding: 23px 0;
 }
+
 .status-get {
   width: 259px;
   height: 45px;
@@ -180,19 +168,14 @@
   font-family: 'FiraGO', sans-serif;
   font-weight: 300;
   font-size: 11px;
-  line-height: 100%;
-  letter-spacing: 0%;
   text-align: right;
   color: #474747;
 }
 
 .user-name {
   font-family: 'FiraGO', sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 150%;
-  letter-spacing: 0%;
   font-weight: bold;
+  font-size: 14px;
   color: #0d0f10;
 }
 
@@ -202,11 +185,119 @@
   justify-content: center;
   gap: 70px;
 }
+
 .deadline-result {
   font-family: 'FiraGO', sans-serif;
   font-weight: 400;
   font-size: 14px;
-  line-height: 150%;
-  letter-spacing: 0%;
   color: #0d0f10;
+}
+
+@media (max-width: 1024px) {
+  .specificTask-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 0 20px;
+  }
+
+  .task-info {
+    width: 90%;
+  }
+
+  .task-detalie-info {
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .employee,
+  .deadline {
+    gap: 40px;
+  }
+
+  .filteredIcons {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .filterStatus,
+  .filteredDepart {
+    width: auto;
+    padding: 5px 10px;
+    text-align: center;
+  }
+
+  .task-title {
+    font-size: 28px !important;
+    text-align: center;
+  }
+
+  .desc-text {
+    font-size: 16px;
+    text-align: justify;
+  }
+
+  .task-status-api {
+    padding: 15px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .task-title {
+    font-size: 24px !important;
+  }
+
+  .desc-text {
+    font-size: 14px;
+  }
+
+  .task-detalie-info {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .employee,
+  .deadline {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filteredIcons {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .filterStatus,
+  .filteredDepart {
+    width: auto;
+    padding: 5px 10px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .task-title {
+    font-size: 20px !important;
+  }
+
+  .desc-text {
+    font-size: 12px;
+  }
+
+  .filteredIcons {
+    align-items: center;
+  }
+
+  .status-get {
+    width: 100%;
+  }
+
+  .employee-profile {
+    flex-direction: column;
+    gap: 5px;
+    text-align: center;
+  }
 }
