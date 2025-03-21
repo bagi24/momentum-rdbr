@@ -55,8 +55,8 @@
   flex-direction: column;
   position: absolute;
   z-index: 1000;
-  max-height: 480px; /* სიმაღლის შეზღუდვა */
-  overflow-y: auto; /* სქროლის დამატება */
+  max-height: 480px;
+  overflow-y: auto;
 }
 
 .dropdown-items li {

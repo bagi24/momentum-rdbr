@@ -24,9 +24,11 @@
   margin-bottom: 5px;
 }
 .reply {
-  color: #8b5cf6;
+  color: #8b5cf6 !important;
   text-decoration: none;
   font-size: 14px;
+  border: none;
+  background-color: inherit;
 }
 .reply-section {
   position: relative;

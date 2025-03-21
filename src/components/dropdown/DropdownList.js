@@ -76,7 +76,7 @@ const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }
       name: 'employee',
       label: 'თანამშრომელი',
       items: employees.map(emp => ({
-        id: emp.id, // Ensure `id` is included
+        id: emp.id,
         name: emp.name,
         surname: emp.surname,
         avatar: emp.avatar,
@@ -133,7 +133,7 @@ const DropdownList = ({ setSelectedFilters, selectedFilters, setAppliedFilters }
                   </li>
                 ))
               ) : (
-                <li>No items available</li>
+                <li>თანამშრომელთა სია ცარიელია</li>
               )}
               <button className='choose-btn' onClick={handleApplyFilters}>
                 არჩევა

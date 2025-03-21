@@ -24,6 +24,15 @@ const TaskCreate = () => {
   const [selectedPriority, setSelectedPriority] = useState({ id: null, icon: null, name: '' });
   const [showModal, setShowModal] = useState(false);
 
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState({});
+
+  const handleStatusSelect = status => {
+    setSelectedStatus(status);
+    setFormData(prev => ({ ...prev, status: status.id })); // სტატუსის განახლება formData-ში
+    setIsStatusDropdownOpen(false);
+  };
+
   const [formData, setFormData] = useState({
     title: '',
     department: '',
@@ -218,7 +227,7 @@ const TaskCreate = () => {
               </div>
             </div>
           </label>
-          <label>
+          <label style={{ opacity: formData.department ? 1 : 0.5 }}>
             <p>პასუხისმგებელი თანამშრომელი*</p>
             <CustomDropdown
               options={filteredEmployees}
@@ -268,17 +277,37 @@ const TaskCreate = () => {
               </div>
             </div>
 
-            <label>
-              <p>სტატუსი*</p>
-              <select name='status' value={formData.status} onChange={handleChange} required>
-                <option value=''>აირჩიეთ</option>
-                {statuses.map(status => (
-                  <option key={status.id} value={status.id}>
-                    {status.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <div className='left-3-content'>
+              <p>სტატუსი *</p>
+              <div className='custom-dropdown'>
+                <div
+                  className='dropdown-header'
+                  onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}>
+                  {selectedStatus.name ? (
+                    <>
+                      <span>{selectedStatus.name}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>აირჩიეთ</span>
+                    </>
+                  )}
+                  <img src={ArrowDown} alt='arrow-down' className='dropdown-arrow' />
+                </div>
+                {isStatusDropdownOpen && (
+                  <div className='dropdown-options'>
+                    {statuses.map(status => (
+                      <div
+                        key={status.id}
+                        className='dropdown-option'
+                        onClick={() => handleStatusSelect(status)}>
+                        {status.name}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className='right-3'>

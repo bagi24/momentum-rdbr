@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CommentArrow from '../../assets/icons/Frame 1000005939.png';
 import './CommentSection.css';
 import { API_TOKEN } from '../../config/config';
@@ -9,13 +9,7 @@ const CommentSection = ({ taskId }) => {
   const [replyTo, setReplyTo] = useState(null);
   const [comments, setComments] = useState([]);
 
-  useEffect(() => {
-    if (taskId) {
-      fetchComments();
-    }
-  }, [taskId]);
-
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       const response = await fetch(
         `https://momentum.redberryinternship.ge/api/tasks/${taskId}/comments`,
@@ -37,7 +31,13 @@ const CommentSection = ({ taskId }) => {
     } catch (error) {
       console.error('Error fetching comments:', error);
     }
-  };
+  }, [taskId]);
+
+  useEffect(() => {
+    if (taskId) {
+      fetchComments();
+    }
+  }, [taskId, fetchComments]);
 
   const handleCommentInputChange = e => {
     setCommentInput(e.target.value);
@@ -107,11 +107,7 @@ const CommentSection = ({ taskId }) => {
   };
 
   const toggleReplyInput = commentId => {
-    if (replyTo === commentId) {
-      setReplyTo(null);
-    } else {
-      setReplyTo(commentId);
-    }
+    setReplyTo(prevReplyTo => (prevReplyTo === commentId ? null : commentId));
   };
 
   return (
@@ -138,15 +134,15 @@ const CommentSection = ({ taskId }) => {
             <div className='comment-content'>
               <p className='username'>{comment.author_nickname || 'ანონიმური'}</p>
               <p className='text'>{comment.text}</p>
-              <a
-                href='#'
+
+              <button
                 className='reply'
                 onClick={e => {
                   e.preventDefault();
                   toggleReplyInput(comment.id);
                 }}>
                 <img src={CommentArrow} alt='' />
-              </a>
+              </button>
 
               {replyTo === comment.id && (
                 <div className='reply-section'>
